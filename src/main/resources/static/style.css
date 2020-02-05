@@ -1,0 +1,13 @@
+.dates-combobox .cell {
+    -fx-text-fill: #FFF;
+    -fx-background-color:  #272828;
+}
+
+.dates-combobox .cell:hover{
+    -fx-text-fill: #272828;
+    -fx-background-color:  #FFF;
+}
+
+.calculateBtn:hover {
+    -fx-background-color: white;
+}

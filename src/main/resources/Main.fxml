@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="879.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.justindodson.Controllers.MainController">
+  <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="closeButton" mnemonicParsing="false" onAction="#close" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #414B55 #414B55;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="58.0" prefWidth="631.0" style="-fx-background-color: #414B55;">
+                     <children>
+                        <ImageView fitHeight="72.0" fitWidth="372.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/QPP_logo.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Region prefHeight="58.0" prefWidth="144.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <SplitPane dividerPositions="0.2309495896834701" prefHeight="160.0" prefWidth="200.0" style="-fx-border-color: #CACACA;" VBox.vgrow="ALWAYS">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="702.0" prefWidth="190.0">
+                           <children>
+                              <VBox fx:id="stockList" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #414B55 #414B55;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="17.0" prefWidth="172.0" text="Stock Watchlist" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <JFXTabPane />
+                                    <ListView fx:id="watchList" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #414B55 #414B55;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TabPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #414B55 #414B55;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <tabs>
+                                  <Tab fx:id="searchTab" text="Search">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="679.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox prefHeight="41.0" prefWidth="630.0">
+                                                         <children>
+                                                            <TextField fx:id="stockSearchBar" promptText="Search for New Stock" HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="15.0" />
+                                                               </HBox.margin>
+                                                            </TextField>
+                                                            <JFXButton fx:id="searchButton" onAction="#searchButtonClicked" prefHeight="27.0" prefWidth="79.0" style="-fx-background-color: #1560ba;" text="Search" textFill="WHITE">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                            </JFXButton>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                      <Label text="Search Results" textFill="WHITE" />
+                                                      <Separator prefWidth="200.0">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin></Separator>
+                                                      <HBox minHeight="-Infinity" prefHeight="140.0" prefWidth="663.0">
+                                                         <children>
+                                                            <GridPane minHeight="-Infinity" prefHeight="146.0" prefWidth="663.0">
+                                                              <columnConstraints>
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="216.0" />
+                                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="486.0" minWidth="10.0" prefWidth="414.0" />
+                                                              </columnConstraints>
+                                                              <rowConstraints>
+                                                                <RowConstraints />
+                                                                <RowConstraints maxHeight="90.0" minHeight="30.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="133.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints maxHeight="131.0" minHeight="30.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints maxHeight="147.0" minHeight="30.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints maxHeight="147.0" minHeight="50.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                                                              </rowConstraints>
+                                                               <children>
+                                                                  <Label text="Stock Symbol:" textFill="WHITE" GridPane.rowIndex="1" />
+                                                                  <Label text="Full Company Name:" textFill="WHITE" GridPane.rowIndex="2" />
+                                                                  <Label text="Market:" textFill="WHITE" GridPane.rowIndex="3" />
+                                                                  <Button fx:id="stockPriceButton" disable="true" mnemonicParsing="false" onAction="#getCurrentStockPrice" prefHeight="27.0" prefWidth="163.0" text="Click For Current Price" GridPane.rowIndex="5">
+                                                                     <GridPane.margin>
+                                                                        <Insets top="10.0" />
+                                                                     </GridPane.margin>
+                                                                  </Button>
+                                                                  <Label fx:id="stockPriceLabel" prefHeight="17.0" prefWidth="308.0" textFill="WHITE" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+                                                                     <GridPane.margin>
+                                                                        <Insets left="10.0" top="10.0" />
+                                                                     </GridPane.margin>
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                                  <Text fx:id="stockSymbolResult" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <GridPane.margin>
+                                                                        <Insets left="20.0" />
+                                                                     </GridPane.margin>
+                                                                  </Text>
+                                                                  <Text fx:id="stockCompanyResult" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                                                     <GridPane.margin>
+                                                                        <Insets left="20.0" />
+                                                                     </GridPane.margin>
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                  </Text>
+                                                                  <Text fx:id="stockMarketResult" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <GridPane.margin>
+                                                                        <Insets left="20.0" />
+                                                                     </GridPane.margin>
+                                                                  </Text>
+                                                                  <Label text="Select Date:" textFill="WHITE" GridPane.rowIndex="4" />
+                                                                  <ChoiceBox fx:id="optionsDateSelector" prefHeight="27.0" prefWidth="224.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                                     <GridPane.margin>
+                                                                        <Insets left="10.0" />
+                                                                     </GridPane.margin>
+                                                                  </ChoiceBox>
+                                                                  <JFXSpinner fx:id="searchSpinner" prefHeight="30.0" prefWidth="198.0" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+                                                                     <GridPane.margin>
+                                                                        <Insets right="300.0" />
+                                                                     </GridPane.margin>
+                                                                  </JFXSpinner>
+                                                                  <JFXSpinner fx:id="priceLoadSpinner" radius="10.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                                     <GridPane.margin>
+                                                                        <Insets left="30.0" top="5.0" />
+                                                                     </GridPane.margin>
+                                                                  </JFXSpinner>
+                                                               </children>
+                                                               <HBox.margin>
+                                                                  <Insets bottom="20.0" />
+                                                               </HBox.margin>
+                                                            </GridPane>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER_RIGHT" prefHeight="31.0" prefWidth="630.0">
+                                                         <children>
+                                                            <JFXButton fx:id="qppCalculateBtn" disable="true" onAction="#calculateQppStockData" prefHeight="27.0" prefWidth="156.0" style="-fx-background-color: #1560ba;" text="Calculate QPP Price" textFill="WHITE" />
+                                                            <Region fx:id="currentPriceSpinner" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                                                            <JFXButton fx:id="clearSearchButton" onAction="#clearSearchResults" prefHeight="27.0" prefWidth="156.0" style="-fx-background-color: #1560ba;" text="Clear Stock Search" textFill="WHITE" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </padding>
+                                                         <VBox.margin>
+                                                            <Insets top="40.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <Separator prefWidth="200.0">
+                                                         <VBox.margin>
+                                                            <Insets bottom="20.0" top="20.0" />
+                                                         </VBox.margin>
+                                                      </Separator>
+                                                      <TableView fx:id="qppTable" prefHeight="302.0" prefWidth="630.0" VBox.vgrow="ALWAYS">
+                                                        <columns>
+                                                          <TableColumn fx:id="stockColumn" prefWidth="75.0" text="Stock" />
+                                                          <TableColumn fx:id="currentPriceColumn" prefWidth="101.0" text="Current Price" />
+                                                            <TableColumn fx:id="qppPriceColumn" prefWidth="75.0" text="QPP Price" />
+                                                            <TableColumn fx:id="percentageDifferenceColumn" prefWidth="99.0" text="\% Difference" />
+                                                            <TableColumn fx:id="dateColumn" minWidth="-Infinity" prefWidth="154.0" text="Date" />
+                                                        </columns>
+                                                         <columnResizePolicy>
+                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy>
+                                                      </TableView>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Stock Options Trends">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                    <Tab text="Stock Details">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </VBox>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
