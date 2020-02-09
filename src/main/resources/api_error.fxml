@@ -34,7 +34,7 @@
                   <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
                </HBox.margin>
             </ImageView>
-            <Text fill="#fffdfd" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There was an error calling the stock request API.           Pease check your API dashboard log for more information" wrappingWidth="179.0" HBox.hgrow="ALWAYS">
+            <Text fill="#fffdfd" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There was an error calling the stockSymbol request API.           Pease check your API dashboard log for more information" wrappingWidth="179.0" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="18.0" />
                </font>

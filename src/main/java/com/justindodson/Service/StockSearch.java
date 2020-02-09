@@ -93,10 +93,17 @@ public class StockSearch {
         return dates;
     }
 
-    public double calculateQppPrice(String stock, int timestamp) {
+    // this will return the qpp price and options data (total contracts)
+    public Map<String, Double> getQppOptionsData(String stock, int timestamp) {
+        Map<String, Double> optionsData = new HashMap<>();
+
         StringBuffer responseContent = optionsApiCall(stock, String.valueOf(timestamp));
 
-        return getQppPrice(responseContent.toString());
+        optionsData.put("qppPrice", getQppPrice(responseContent.toString()));
+        optionsData.put("calls", getCalls(responseContent.toString()));
+        optionsData.put("puts", getPuts(responseContent.toString()));
+
+        return optionsData;
     }
 
     /***********************
@@ -199,6 +206,10 @@ public class StockSearch {
         return datesMap;
     }
 
+    private List<String> getPutsAndCalls(String responseBody) {
+        return new ArrayList<>();
+    }
+
     private double getQppPrice(String responseBody) {
         double qppPrice = 0;
         double productTotal = 0;
@@ -232,6 +243,22 @@ public class StockSearch {
             qppPrice = productTotal / oiTotal;
             return qppPrice;
         }
+    }
+
+    private double getPuts(String responseBody) {
+        org.json.JSONObject object = new org.json.JSONObject(responseBody);
+        org.json.JSONObject contracts = object.getJSONObject("contracts");
+
+        org.json.JSONArray puts = contracts.getJSONArray("puts");
+        return puts.length();
+    }
+
+    private double getCalls(String responseBody) {
+        org.json.JSONObject object = new org.json.JSONObject(responseBody);
+        org.json.JSONObject contracts = object.getJSONObject("contracts");
+
+        org.json.JSONArray calls = contracts.getJSONArray("calls");
+        return calls.length();
     }
 
     private String getDateFromTimestamp(int timestamp) {

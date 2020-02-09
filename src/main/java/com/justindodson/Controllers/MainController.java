@@ -43,9 +43,12 @@ public class MainController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockSymbol"));
+        marketCapColumn.setCellValueFactory(new PropertyValueFactory<>("marketCap"));
         currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
         qppPriceColumn.setCellValueFactory(new PropertyValueFactory<>("qppPrice"));
         percentageDifferenceColumn.setCellValueFactory(new PropertyValueFactory<>("percentDiff"));
+        callsColumn.setCellValueFactory(new PropertyValueFactory<>("calls"));
+        putsColumn.setCellValueFactory(new PropertyValueFactory<>("puts"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
     }
 
@@ -103,7 +106,12 @@ public class MainController implements Initializable {
     private TableColumn percentageDifferenceColumn;
     @FXML
     private TableColumn dateColumn;
-
+    @FXML
+    private TableColumn marketCapColumn;
+    @FXML
+    private TableColumn callsColumn;
+    @FXML
+    private TableColumn putsColumn;
 
     /***********************
     // == FXML METHODS ==
@@ -170,10 +178,13 @@ public class MainController implements Initializable {
 
                 Runnable task = () -> {
                     loadTableSpinner.setVisible(true);
+                    Map<String, Double> optionsData = stockSearch.getQppOptionsData(stock, timestamp);
+                    qppPrice = optionsData.get("qppPrice");
+                    int calls = optionsData.get("calls").intValue();
+                    int puts = optionsData.get("puts").intValue();
 
-                    qppPrice = stockSearch.calculateQppPrice(stock, timestamp);
                     System.out.println("Stock: " + stock + " current Price: " + currentStockPrice + " QPP: " + qppPrice + " date: " + selectedDate);
-                    populateTableData(stock, currentStockPrice, qppPrice, selectedDate.toString());
+                    populateTableData(stockCompanyResult.getText(), marketCapLabel.getText(), currentStockPrice, qppPrice, calls, puts, selectedDate.toString());
 
                     loadTableSpinner.setVisible(false);
                 };
@@ -300,12 +311,12 @@ public class MainController implements Initializable {
         optionsDateSelector.getItems().clear();
     }
 
-    private void populateTableData(String stockSymbol, Double currentStockPrice, double qppPrice, String date) {
+    private void populateTableData(String stockSymbol, String marketCap, Double currentStockPrice, double qppPrice, int calls, int puts, String date) {
         if(currentStockPrice == null || currentStockPrice <= 0) {
             System.out.println("Null currentStockPrice");
         } else{
             double percentDiff = calculatePercentageDifference(currentStockPrice, qppPrice);
-            Stock newStock = new Stock(stockSymbol, currentStockPrice, qppPrice, percentDiff, date);
+            Stock newStock = new Stock(stockSymbol, marketCap, currentStockPrice, qppPrice, percentDiff, calls, puts, date);
             stockData.addNewStock(newStock);
             Runnable task = () -> {
                 qppTable.getItems().add(newStock);
