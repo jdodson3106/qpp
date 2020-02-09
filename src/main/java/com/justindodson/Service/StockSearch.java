@@ -67,15 +67,16 @@ public class StockSearch {
         return new JSONObject();
     }
 
-
-    public Double getCurrentPrice(String stockSymbol) {
+    // puts the price and market cap data into a map and return the hashmap.
+    public Map<String, Double> getCurrentPriceAndMarketCap(String stockSymbol) {
+        Map<String, Double> priceAndCap = new HashMap<>();
         String apiURL = "https://api.worldtradingdata.com/api/v1/stock?symbol=" + stockSymbol + "&api_token=Zvqaravnv6m3zLch9UnJPDIi41OZ1VEwzlC7KWsohXpCqQ8zUNjy4aKsxPiv";
 
-
         try {
-            String price = parsePrice(getResponseContent(apiURL, null).toString());
-            System.out.println("returning price: \"" + price + "\" from getCurrentPrice() method in stocksearch");
-            return Double.parseDouble(price);
+            List<String> realTimeData = parsePriceAndCap(getResponseContent(apiURL, null).toString());
+            priceAndCap.put("price", Double.parseDouble(realTimeData.get(0)));
+            priceAndCap.put("marketCap", Double.parseDouble(realTimeData.get(1)));
+            return priceAndCap;
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -167,15 +168,22 @@ public class StockSearch {
         return responseContent;
     }
 
-    private String parsePrice(String responseBody) throws ParseException {
+    // parse the price and market cap from the response API
+    private List<String> parsePriceAndCap(String responseBody) throws ParseException {
+        List<String> data = new ArrayList<>();
         org.json.JSONObject object = new org.json.JSONObject(responseBody);
 
         org.json.JSONArray dataArray = new org.json.JSONArray(object.get("data").toString());
+
         String price = dataArray.getJSONObject(0).get("price").toString();
+        data.add(price);
 
-        return price;
+        String marketCap = dataArray.getJSONObject(0).get("market_cap").toString();
+        data.add(marketCap);
 
+        return data;
     }
+
 
     private HashMap<Integer,String> parseDateOptions(String responseBody) {
         HashMap<Integer, String> datesMap = new HashMap<>();

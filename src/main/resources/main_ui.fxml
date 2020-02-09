@@ -70,6 +70,7 @@
                         <Insets bottom="25.0" />
                      </VBox.margin>
                   </JFXTextField>
+                  <JFXTextField fx:id="marketCapLabel" editable="false" focusColor="WHITE" labelFloat="true" promptText="Market Cap" style="-fx-text-fill: white; -fx-prompt-text-fill: grey;" unFocusColor="WHITE" />
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                      <children>
                         <HBox prefWidth="200.0">

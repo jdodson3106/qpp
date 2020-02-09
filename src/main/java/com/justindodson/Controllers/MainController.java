@@ -32,9 +32,9 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toMap;
@@ -54,6 +54,7 @@ public class MainController implements Initializable {
     private static StockData stockData = new StockData();
     private StockSearch stockSearch;
     private Double currentStockPrice = null;
+    private Double marketCap = null;
     private Double qppPrice;
     private String searchQuery;
 
@@ -68,6 +69,8 @@ public class MainController implements Initializable {
     private JFXTextField stockMarketResult;
     @FXML
     private JFXTextField stockPriceLabel;
+    @FXML
+    private JFXTextField marketCapLabel;
 
     // buttons
     @FXML
@@ -151,8 +154,9 @@ public class MainController implements Initializable {
         Object selectedDate = optionsDateSelector.getValue();
         qppPrice = null;
 
-        if(currentStockPrice == null) {
-            currentStockPrice = stockSearch.getCurrentPrice(stock);
+        if(currentStockPrice == null || marketCap == null) {
+            currentStockPrice = stockSearch.getCurrentPriceAndMarketCap(stock).get("price");
+            marketCap = stockSearch.getCurrentPriceAndMarketCap(stock).get("marketCap");
         }
 
         if(selectedDate == null) {
@@ -222,18 +226,18 @@ public class MainController implements Initializable {
         }
     }
 
-    private AtomicBoolean getCurrentStockPrice() {
-        AtomicBoolean isCallSuccess = new AtomicBoolean(false);
+    private void getCurrentStockPrice() {
         Runnable task = () -> {
-            currentStockPrice =  stockSearch.getCurrentPrice(stockSymbolResult.getText());
+            Map<String, Double> priceAndCapData = stockSearch.getCurrentPriceAndMarketCap(stockSymbolResult.getText());
+            currentStockPrice =  priceAndCapData.get("price");
+            marketCap = priceAndCapData.get("marketCap");
             if(currentStockPrice != null) {
+                NumberFormat formatter = NumberFormat.getInstance();
                 Platform.runLater(() -> stockPriceLabel.setText("$ " + currentStockPrice));
-                isCallSuccess.set(true);
+                Platform.runLater(() -> marketCapLabel.setText("$ " + formatter.format(marketCap)));
             }
         };
         new Thread(task).start();
-
-        return isCallSuccess;
     }
 
     // when the search is made, this method will populate the dropdown list with the correct dates.
@@ -292,6 +296,7 @@ public class MainController implements Initializable {
         stockCompanyResult.setText("");
         stockMarketResult.setText("");
         stockPriceLabel.setText("$ ");
+        marketCapLabel.setText("$ ");
         optionsDateSelector.getItems().clear();
     }
 
