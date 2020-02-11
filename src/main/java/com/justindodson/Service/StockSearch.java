@@ -1,9 +1,9 @@
 package com.justindodson.Service;
 
 import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -70,7 +70,7 @@ public class StockSearch {
     // puts the price and market cap data into a map and return the hashmap.
     public Map<String, Double> getCurrentPriceAndMarketCap(String stockSymbol) {
         Map<String, Double> priceAndCap = new HashMap<>();
-        String apiURL = "https://api.worldtradingdata.com/api/v1/stock?symbol=" + stockSymbol + "&api_token=Zvqaravnv6m3zLch9UnJPDIi41OZ1VEwzlC7KWsohXpCqQ8zUNjy4aKsxPiv";
+        String apiURL = "https://api.worldtradingdata.com/api/v1/stock?symbol=" + stockSymbol + "&api_token=" + System.getenv("REALTIME_API_KEY");
 
         try {
             List<String> realTimeData = parsePriceAndCap(getResponseContent(apiURL, null).toString());
