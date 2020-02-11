@@ -114,7 +114,7 @@ public class StockSearch {
         String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-options?symbol=" + stockSymbol + "&date=" + timestamp;
         Map<String, String> headers = new HashMap<>();
         headers.put("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
-        headers.put("x-rapidapi-key", "31d649ae3fmsh3f692ba30b9f956p1423e6jsnb27dc04806ba");
+        headers.put("x-rapidapi-key", System.getenv("RAPID_API_KEY"));
 
        return getResponseContent(url, headers);
 
