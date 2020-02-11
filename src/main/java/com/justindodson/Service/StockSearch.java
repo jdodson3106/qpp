@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -53,8 +55,10 @@ public class StockSearch {
     ***************************/
     public JSONObject performSearch() throws Exception{
 
+        Path stockFilePath = Paths.get(getClass().getClassLoader().getResource("stock.json").toURI());
+
         JSONParser parser = new JSONParser();
-        JSONArray array = (JSONArray) parser.parse(new FileReader("/Users/justindodson/Desktop/Java Projects/Spring Aps/QPP/src/main/resources/stock.json"));
+        JSONArray array = (JSONArray) parser.parse(new FileReader(stockFilePath.toString()));
 
         Iterator<JSONObject> iterator = array.iterator();
 
