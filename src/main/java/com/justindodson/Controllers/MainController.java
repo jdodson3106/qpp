@@ -28,7 +28,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -133,12 +132,13 @@ public class MainController implements Initializable {
             } else {
                 stockSearch = new StockSearch(this.searchQuery);
                 try {
-                    JSONObject searchResult = stockSearch.performSearch();
+                    Map<String, String> searchResult = stockSearch.performSearch();
                     showSearchResults(searchResult);
-                    getCurrentStockPrice();
+                    getCurrentStockPrice(searchResult);
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
                 }
             }
             searchSpinner.setVisible(false);
@@ -163,8 +163,9 @@ public class MainController implements Initializable {
         qppPrice = null;
 
         if(currentStockPrice == null || marketCap == null) {
-            currentStockPrice = stockSearch.getCurrentPriceAndMarketCap(stock).get("price");
-            marketCap = stockSearch.getCurrentPriceAndMarketCap(stock).get("marketCap");
+            Map<String, String> searchData = stockSearch.performSearch();
+            currentStockPrice = Double.parseDouble(searchData.get("price"));
+            marketCap = Double.parseDouble(searchData.get("market_cap"));
         }
 
         if(selectedDate == null) {
@@ -217,8 +218,8 @@ public class MainController implements Initializable {
      ****************************/
 
     // This method will populate the stock information based on the search results
-    private void showSearchResults(JSONObject searchResult) {
-        if(searchResult.size() != 0) {
+    private void showSearchResults(Map<String, String> searchResult) {
+        if(!searchResult.containsKey("error")) {
             // access data and update view
             populateDropdown(searchResult.get("symbol").toString());
             qppCalculateBtn.setDisable(false);
@@ -229,26 +230,29 @@ public class MainController implements Initializable {
         else {
             // update view to show not a valid stock
             qppCalculateBtn.setDisable(true);
-            stockPriceButton.setDisable(true);
-            stockSymbolResult.setText(searchQuery.toUpperCase() + ": Did not return a valid result.");
+            stockSymbolResult.setText(searchResult.get("error"));
             stockCompanyResult.setText("");
             stockMarketResult.setText("");
             stockPriceLabel.setText("$ ");
         }
     }
 
-    private void getCurrentStockPrice() {
-        Runnable task = () -> {
-            Map<String, Double> priceAndCapData = stockSearch.getCurrentPriceAndMarketCap(stockSymbolResult.getText());
-            currentStockPrice =  priceAndCapData.get("price");
-            marketCap = priceAndCapData.get("marketCap");
-            if(currentStockPrice != null) {
-                NumberFormat formatter = NumberFormat.getInstance();
-                Platform.runLater(() -> stockPriceLabel.setText("$ " + currentStockPrice));
-                Platform.runLater(() -> marketCapLabel.setText("$ " + formatter.format(marketCap)));
-            }
-        };
-        new Thread(task).start();
+    private void getCurrentStockPrice(Map<String, String> stockDataMap) {
+        if(!stockDataMap.containsKey("error")) {
+            Runnable task = () -> {
+                Map<String, String> priceAndCapData = stockDataMap;
+                currentStockPrice = Double.parseDouble(priceAndCapData.get("price"));
+                System.out.println(priceAndCapData.get("market_cap"));
+                marketCap = Double.parseDouble(priceAndCapData.get("market_cap"));
+                if(currentStockPrice != null) {
+                    NumberFormat formatter = NumberFormat.getInstance();
+                    Platform.runLater(() -> stockPriceLabel.setText("$ " + currentStockPrice));
+                    Platform.runLater(() -> marketCapLabel.setText("$ " + formatter.format(marketCap)));
+                }
+            };
+            new Thread(task).start();
+        }
+
     }
 
     // when the search is made, this method will populate the dropdown list with the correct dates.

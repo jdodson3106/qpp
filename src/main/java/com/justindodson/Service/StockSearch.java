@@ -1,19 +1,12 @@
 package com.justindodson.Service;
 
 import org.json.JSONException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -53,41 +46,19 @@ public class StockSearch {
     /**************************
     *      PUBLIC METHODS
     ***************************/
-    public JSONObject performSearch() throws Exception{
+    public Map<String, String> performSearch() {
+        String apiURL = "https://api.worldtradingdata.com/api/v1/stock?symbol=" + this.searchString + "&api_token=" + System.getenv("REALTIME_API_KEY");
+        org.json.JSONObject returnObject = new org.json.JSONObject(getResponseContent(apiURL, null).toString());
+        Map<String, String> searchResults = new HashMap<>();
 
-        Path stockFilePath = Paths.get(getClass().getClassLoader().getResource("stock.json").toURI());
-
-        JSONParser parser = new JSONParser();
-        JSONArray array = (JSONArray) parser.parse(new FileReader(stockFilePath.toString()));
-
-        Iterator<JSONObject> iterator = array.iterator();
-
-        while(iterator.hasNext()){
-            JSONObject objt = iterator.next();
-            if(objt.get("symbol").equals(this.searchString.toUpperCase())) {
-                return objt;
-            }
+        if(returnObject.has("Message")){
+            System.out.println("ERROR");
+            searchResults.put("error", "Invalid Stock Symbol");
         }
-        return new JSONObject();
-    }
-
-    // puts the price and market cap data into a map and return the hashmap.
-    public Map<String, Double> getCurrentPriceAndMarketCap(String stockSymbol) {
-        Map<String, Double> priceAndCap = new HashMap<>();
-        String apiURL = "https://api.worldtradingdata.com/api/v1/stock?symbol=" + stockSymbol + "&api_token=" + System.getenv("REALTIME_API_KEY");
-
-        try {
-            List<String> realTimeData = parsePriceAndCap(getResponseContent(apiURL, null).toString());
-            priceAndCap.put("price", Double.parseDouble(realTimeData.get(0)));
-            priceAndCap.put("marketCap", Double.parseDouble(realTimeData.get(1)));
-            return priceAndCap;
-
-        } catch (ParseException e) {
-            e.printStackTrace();
+        else{
+            searchResults = parseStockSearchData(returnObject);
         }
-
-        return null; // return null if the price doesn't come back
-
+        return searchResults;
     }
 
 
@@ -180,19 +151,27 @@ public class StockSearch {
     }
 
     // parse the price and market cap from the response API
-    private List<String> parsePriceAndCap(String responseBody) throws ParseException {
-        List<String> data = new ArrayList<>();
-        org.json.JSONObject object = new org.json.JSONObject(responseBody);
+    private Map<String, String> parseStockSearchData(org.json.JSONObject jsonDataObject) {
+        Map<String, String> jsonData = new HashMap<>();
 
-        org.json.JSONArray dataArray = new org.json.JSONArray(object.get("data").toString());
+        org.json.JSONArray dataArray = new org.json.JSONArray(jsonDataObject.get("data").toString());
+
+        String symbol = dataArray.getJSONObject(0).get("symbol").toString();
+        jsonData.put("symbol", symbol);
+
+        String name = dataArray.getJSONObject(0).get("name").toString();
+        jsonData.put("name", name);
+
+        String stock_exchange_long = dataArray.getJSONObject(0).get("stock_exchange_long").toString();
+        jsonData.put("stock_exchange_long", stock_exchange_long);
 
         String price = dataArray.getJSONObject(0).get("price").toString();
-        data.add(price);
+        jsonData.put("price", price);
 
         String marketCap = dataArray.getJSONObject(0).get("market_cap").toString();
-        data.add(marketCap);
+        jsonData.put("market_cap", marketCap);
 
-        return data;
+        return jsonData;
     }
 
 
@@ -208,10 +187,6 @@ public class StockSearch {
         }
 
         return datesMap;
-    }
-
-    private List<String> getPutsAndCalls(String responseBody) {
-        return new ArrayList<>();
     }
 
     private double getQppPrice(String responseBody) {
